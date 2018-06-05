@@ -5,6 +5,7 @@ function MLPEx
 	[alpha,maxepoch,minEtrain,valepoch,numval,dEnt]=obtenerDatos;%datos de validación
 	[mEnt,mVal,mPru]=divDataset(P,dEnt);%division del dataset
 	mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru)%llama a la red
+	[w1,w2,b1,b2]=inicializardatos(P,T);%inicializacion de pesos y bias
 end
 function [P,T]=obtenerDataset
 	P=-2:.2:2;
@@ -52,15 +53,28 @@ function mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mP
 		end
 	end
 end
-function [mEnt,mVal,mPru]=divDataset(P,dEnt)
+function [mEnt,mVal,mPru,tEnt,tVal,tPru]=divDataset(P,T,dEnt)
 	tam=length(P);
-	tam1=(tam*dEnt(1))/100;%saca el tamaño de la matriz de entrenamiento
-	tam1=round(tam1);%se redondea el valor de la division por si da decimal
-	tam2=(tam-tam1)/2;%saca el tamaño de las matrices de validacion y prueba
+	tam2=(tam*dEnt(2))/100;%saca el tamaño de la matriz de validacion y prueba
+	tam2=round(tam2);%se redondea el valor de la division por si da decimal
+	tam1=(tam-(tam2*2));%saca el tamaño de la matriz de entrenamiento
 	mEnt=P(1:tam1);%asina los valores a la matriz de entrenamiento
 	mVal=P((tam1+1):(tam1+tam2));%asigna valores a la matriz de validacion
 	mPru=P((tam-tam2+1):tam);%asigna valroes a la matriz de prueba
+    	tEnt=T(1:tam1);%asina los valores a la matriz de entrenamiento
+	tVal=T((tam1+1):(tam1+tam2));%asigna valores a la matriz de validacion
+	tPru=T((tam-tam2+1):tam);%asigna valroes a la matriz de prueba
 end
+
+function [w1,w2,b1,b2]=inicializardatos(P,T)
+    tamEnt=size(P);
+    tamTar=size(T);
+    w1= -1 + (1 + 1) * rand (tamEnt(1),tamEnt(2))
+    w2= -1 + (1 + 1) * rand (tamEnt(1),tamEnt(2))
+    b1= -1 + (1 + 1) * rand (tamTar(1),tamTar(2))
+    b2= -1 + (1 + 1) * rand (tamTar(1),tamTar(2))
+end
+
 function [a] = feedforward(w,b,functions,p)
     a = {};
     a{1} = p;
