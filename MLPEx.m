@@ -6,6 +6,7 @@ function MLPEx
 	[mEnt,mVal,mPru]=divDataset(P,dEnt);%division del dataset
 	mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru)%llama a la red
 	[w1,w2,b1,b2]=inicializardatos(P,T);%inicializacion de pesos y bias
+	graficar(w,b,vtf,P,T,errores)
 end
 function [P,T]=obtenerDataset
 	P=-2:.2:2;
@@ -106,4 +107,25 @@ function [w, b] = backpropagation(a,w,b,functions,e,alpha)
         w{cont} = w{cont}-alpha*sensitivities{cont}*a{cont}';
         b{cont} = b{cont}-alpha*sensitivities{cont};
     end 
+end
+function graficar(w,b,functions,p,t,errores)
+
+    network = [];
+
+    for cont=1:length(p)
+        a=feedforward(w,b,functions,p(cont));
+        network(end+1)=a{length(a)};
+    end        
+    figure('Name','Cálculo del error');
+    plot(errores)
+    title('Errores por época')
+    grid
+    figure('Name','Resultados');
+    plot(p,network)
+    hold on
+    plot(p,t)
+    legend('y = Red neuronal','y = 1+sin((pi/4)*p)')
+    title('Función Seno VS Red')
+    hold off
+    grid
 end
