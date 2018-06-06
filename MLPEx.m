@@ -4,10 +4,10 @@ function MLPEx
 	[w,b]=initWaB;%inicialización de pesos y bias
 	[alpha,maxepoch,minEtrain,valepoch,numval,dEnt]=obtenerDatos;%datos de validación
 	[mEnt,mVal,mPru]=divDataset(P,dEnt);%division del dataset
-	mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru)%llama a la red
-	[w1,w2,b1,b2]=inicializardatos(P,T);%inicializacion de pesos y bias
-	graficar(w,b,vtf,P,T,errores)
+	[Eit,w,b] = mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru);%llama a la red        
+	graficar(w,b,vtf,P,T,Eit)
 end
+
 function [P,T]=obtenerDataset
 	P=-2:.2:2;
 	T=1+sin((pi/4)*P);
@@ -32,25 +32,25 @@ function [alpha,maxepoch,minEtrain,valepoch,numval,dEnt]=obtenerDatos
 	numval=3;
 	dEnt=input('Ingrese de que forma se dividira el Dataset, escribe los numero separados por un espacio y entre []: ');
 end
-function mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru)
-	error1=1;
-    [n,m]=size(mEnt);
-	for i=1:maxepoch+1
+function [Eit,w,b] = mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru)
+	Eit=[];
+    [n,k]=size(mEnt);
+	for i=1:maxepoch+1  
 		if i==maxepoch+1
 			fprintf('No se logro entrenamiento\n');
 			break
-		elseif error1<minEtrain
+		elseif ~isempty(Eit) && Eit(end)<minEtrain
 			fprintf('Terminó entrenamiento\n');
 			break
-		else		
-			for j=1:size(mEnt)
-				errc=0;
-				a=feedforward(w,b,vtf,mEnt(j));
-				e=T(j)-a{length (a)};
-				errc=errc+e;
-				[w,b]=backpropagation(a,w,b,vtf,e,alpha);
-			end
-			error1=errc/m;
+        else		
+            Eit(end+1)=0;
+			for j=1:length(mEnt)
+				a=feedforward(w,b,vtf,mEnt(j));                 
+				e=T(j)-a{length(a)};
+				Eit(end)=Eit(end)+e;
+				[w,b]=backpropagation(a,w,b,vtf,e,alpha);                
+            end            
+			Eit(end)=Eit(end)/k;
 		end
 	end
 end
@@ -108,20 +108,20 @@ function [w, b] = backpropagation(a,w,b,functions,e,alpha)
         b{cont} = b{cont}-alpha*sensitivities{cont};
     end 
 end
-function graficar(w,b,functions,p,t,errores)
+function graficar(w,b,functions,p,t,Eit)
 
     network = [];
-
+    
     for cont=1:length(p)
         a=feedforward(w,b,functions,p(cont));
         network(end+1)=a{length(a)};
     end        
     figure('Name','Cálculo del error');
-    plot(errores)
+    plot(Eit)
     title('Errores por época')
     grid
     figure('Name','Resultados');
-    plot(p,network)
+    plot(p,network,'o')
     hold on
     plot(p,t)
     legend('y = Red neuronal','y = 1+sin((pi/4)*p)')
