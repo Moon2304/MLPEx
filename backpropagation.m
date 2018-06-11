@@ -1,7 +1,18 @@
 function [w, b] = backpropagation(a,w,b,functions,e,alpha)
     sensitivities = {};
-    sensitivities{length(functions)} = -2*e;
-    cont = length(functions) - 1;
+    
+    cont = length(functions);
+        
+    if functions(cont) == 1
+        sensitivities{cont} = -2*e;
+    elseif functions(cont) == 2
+        sensitivities{cont} = -2*diag(a{cont+1}'*diag(1-a{cont+1}))*e;
+    else
+        sensitivities{cont} = -2*diag(1-a{cont+1}^2)*e;
+    end
+   
+    cont = cont-1;
+    
     while cont >= 1
         if functions(cont) == 2
             sensitivities{cont} = diag(a{cont+1}'*diag(1-a{cont+1}))*w{cont+1}'*sensitivities{cont+1};
