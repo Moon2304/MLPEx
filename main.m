@@ -264,9 +264,10 @@ function entrenar_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 [alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf] = obtener_datos(handles);
 [P,T]=obtenerDataset;%dataset
-[w,b]=initWaB;%inicialización de pesos y bias
+[w,b]=initWaB;%inicializaciÃ³n de pesos y bias
 [mEnt,mVal,mPru]=divDataset(P,dEnt);%division del dataset
 [Eit,w,b] = mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru,handles);%llama a la red        
+[a]=prueba(w,b,mPru,vtf);
 graficar(w,b,vtf,P,T,Eit,handles)
     
 
