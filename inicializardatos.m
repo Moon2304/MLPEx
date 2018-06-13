@@ -1,8 +1,6 @@
-function [w1,w2,b1,b2]=inicializardatos(P,T)
+function [w,b]=inicializardatos(vcn,P,T)
     tamEnt=size(P);
     tamTar=size(T);
-    w1= -1 + (1 + 1) * rand (tamEnt(1),tamEnt(2));
-    w2= -1 + (1 + 1) * rand (tamEnt(1),tamEnt(2));
-    b1= -1 + (1 + 1) * rand (tamTar(1),tamTar(2));
-    b2= -1 + (1 + 1) * rand (tamTar(1),tamTar(2));
+    w= -1 + (1 + 1) * rand (vcn(2),tamEnt(1));
+    b= -1 + (1 + 1) * rand (vcn(2),tamTar(1));
 end
