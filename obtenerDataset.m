@@ -5,7 +5,8 @@ function dataset=obtenerDataset
     else
         archivo=fullfile(a1, Prot1); % variable archivo contiene el nombre de la direccion
     end
-    Lec_archivo = textread(archivo, '%s', 'delimiter', '\n','whitespace', ''); %Leeemos el contenido del archivo y se guarda como un cell array
-    A = cell2mat(Lec_archivo); %Convertimos el cell array a una char matriz
-    dataset = str2double(A); %Convertimos la char matrix a una double matrix, matriz p
+    fileID = fopen(archivo);
+    Lec_archivo=textscan(fileID, '%f');
+    fclose(fileID);
+    dataset = cell2mat(Lec_archivo); %Convertimos el cell array a una char matriz
 end
