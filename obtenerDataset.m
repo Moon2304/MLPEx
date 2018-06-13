@@ -1,12 +1,12 @@
-function dataset=obtenerDataset
-    [Prot1, a1] = uigetfile('*.txt', 'Seleccione un archivo'); %abrimos ventana para seleccionar archivo
-    if isequal(Prot1, 0)
-        return
-    else
-        archivo=fullfile(a1, Prot1); % variable archivo contiene el nombre de la direccion
-    end
-    fileID = fopen(archivo);
+function [P,T]=obtenerDataset(archivo_dataset, archivo_targets)
+    
+    fileID = fopen(archivo_dataset);
     Lec_archivo=textscan(fileID, '%f');
     fclose(fileID);
-    dataset = cell2mat(Lec_archivo); %Convertimos el cell array a una char matriz
+    P = cell2mat(Lec_archivo)'; %Convertimos el cell array a una char matriz
+    
+    fileID = fopen(archivo_targets);
+    Lec_archivo=textscan(fileID, '%f');
+    fclose(fileID);
+    T = cell2mat(Lec_archivo)'; %Convertimos el cell array a una char matriz
 end
