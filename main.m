@@ -262,13 +262,19 @@ function entrenar_Callback(hObject, eventdata, handles)
 % hObject    handle to entrenar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf] = obtener_datos(handles);
-[P,T]=obtenerDataset;%dataset
-[w,b]=initWaB;%inicializaciÃ³n de pesos y bias
-[mEnt,mVal,mPru]=divDataset(P,dEnt);%division del dataset
-[Eit,w,b] = mlp(T,vcn,vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,mPru,handles);%llama a la red        
-[a]=prueba(w,b,mPru,vtf);
-graficar(w,b,vtf,P,T,Eit,handles)
+
+global archivo_dataset
+global archivo_targets
+
+[alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf,tipo_problema] = obtener_datos(handles);
+[P,T]=obtenerDataset(archivo_dataset, archivo_targets); %Dataset
+[w,b]=inicializardatos(vcn); %Inicialización de pesos y bias
+[mEnt,mVal,mPru,tEnt,tVal,tPru]=divDataset(P,T,dEnt); %División del dataset
+[Eit,Eval,w,b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,tEnt,tVal,handles); %Llama a la red  
+aPru=pruebas(w,b,P,vtf);
+%aPru=pruebas(w,b,mPru,vtf);
+graficar(P,T,aPru,Eit,Eval,handles,tipo_problema)
+%graficar(mPru,tPru,aPru,Eit,Eval,handles,tipo_problema)
     
 
 % --- Executes during object creation, after setting all properties.
@@ -289,9 +295,12 @@ function get_dataset_Callback(hObject, eventdata, handles)
 % hObject    handle to get_dataset (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global archivo_dataset
+
 [filename, pathname] = uigetfile('*.txt', 'archivo');
-dataset = [pathname, filename];
-set(handles.dataset, 'String', dataset);
+archivo_dataset = [pathname, filename];
+set(handles.dataset, 'String', archivo_dataset);
 
 
 function targets_Callback(hObject, eventdata, handles)
@@ -321,9 +330,12 @@ function get_targets_Callback(hObject, eventdata, handles)
 % hObject    handle to get_targets (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global archivo_targets
+
 [filename, pathname] = uigetfile('*.txt', 'archivo');
-targets = [pathname, filename];
-set(handles.targets, 'String', targets);
+archivo_targets = [pathname, filename];
+set(handles.targets, 'String', archivo_targets);
 
 
 
@@ -349,7 +361,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function [alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf] = obtener_datos(handles)
+function [alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf,tipo_problema] = obtener_datos(handles)
     alpha=str2double(get(handles.alpha,'String'));
     maxepoch=str2double(get(handles.maxepoch,'String'));
     minEtrain=str2double(get(handles.minEtrain,'String'));
@@ -364,15 +376,4 @@ function [alpha, maxepoch, minEtrain, valepoch, numval, dEnt, vcn, vtf] = obtene
     else
         dEnt=[80 10 10];
     end
-
-function [P,T]=obtenerDataset
-	P=-2:.2:2;
-	T=1+sin((pi/4)*P);    
     
-function [w,b]=initWaB
-	w={ };
-	b={ };
-	w{1}=[-.27;-.41];
-	b{1}=[-.48;-.13];
-	w{2}=[.09 -.17];
-	b{2}=.48;

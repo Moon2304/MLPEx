@@ -1,6 +1,7 @@
-function [a]=prueba(w,b,mPru,vtf)
-a=[];
-  for i=1:lenght(mPru)
-    a(i)=feedforward(w,b,vtf,mPru(i);
-  end
+function [network]=pruebas(w,b,mPru,functions)
+    network=[];
+    for cont=1:length(mPru)
+        a=feedforward(w,b,functions,mPru(cont));
+        network(end+1)=a{length(a)};  
+    end  
 end

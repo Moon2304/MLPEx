@@ -1,15 +1,9 @@
-function graficar(w,b,functions,p,t,Eit,handles)
-
-    network = [];
-    
-    for cont=1:length(p)
-        a=feedforward(w,b,functions,p(cont));
-        network(end+1)=a{length(a)};
-    end        
+function graficar(p,t,network,Eit,Eval,handles,tipo_problema)    
     plot(handles.error_e,Eit)
+    plot(handles.error_v,Eval)
     plot(handles.resultados,p,network,'o')
     hold(handles.resultados,'on') 
     plot(handles.resultados,p,t)
-    legend(handles.resultados,'y = Red neuronal','y = 1+sin((pi/4)*p)')
+    legend(handles.resultados,'y = Red neuronal','y = Targets')
     hold(handles.resultados,'off') 
 end

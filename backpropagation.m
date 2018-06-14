@@ -8,7 +8,7 @@ function [w, b] = backpropagation(a,w,b,functions,e,alpha)
     elseif functions(cont) == 2
         sensitivities{cont} = -2*diag(a{cont+1}'*diag(1-a{cont+1}))*e;
     else
-        sensitivities{cont} = -2*diag(1-a{cont+1}^2)*e;
+        sensitivities{cont} = -2*diag(1-a{cont+1}.^2)*e;
     end
    
     cont = cont-1;
@@ -17,7 +17,7 @@ function [w, b] = backpropagation(a,w,b,functions,e,alpha)
         if functions(cont) == 2
             sensitivities{cont} = diag(a{cont+1}'*diag(1-a{cont+1}))*w{cont+1}'*sensitivities{cont+1};
         else
-            sensitivities{cont} = diag(1-a{cont+1}^2)*w{cont+1}'*sensitivities{cont+1};
+            sensitivities{cont} = diag(1-a{cont+1}.^2)*w{cont+1}'*sensitivities{cont+1};
         end
         cont = cont-1;
     end

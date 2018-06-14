@@ -1,10 +1,9 @@
-function [w,b]=inicializardatos(vcn,P,T)
+function [w,b]=inicializardatos(vcn)
     w={ };
 	b={ };
-    tamEnt=size(P);
-    tamTar=size(T);
-    w{1}= -1 + (1 + 1) * rand (vcn(2),tamEnt(1));
-    b{1}= -1 + (1 + 1) * rand (vcn(2),tamTar(1));
-    w{2}= -1 + (1 + 1) * rand (vcn(3),tamEnt(1));
-    b{2}= -1 + (1 + 1) * rand (vcn(3),tamTar(1));
+    
+    for cont=2:length(vcn)
+        w{cont-1}=rand(vcn(cont),vcn(cont-1));
+        b{cont-1}=rand(vcn(cont),1);
+    end
 end
