@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 06-Jun-2018 17:26:29
+% Last Modified by GUIDE v2.5 18-Jun-2018 11:17:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -270,11 +270,11 @@ global archivo_targets
 [P,T]=obtenerDataset(archivo_dataset, archivo_targets); %Dataset
 [w,b]=inicializardatos(vcn); %Inicialización de pesos y bias
 [mEnt,mVal,mPru,tEnt,tVal,tPru]=divDataset(P,T,dEnt); %División del dataset
-[Eit,Eval,w,b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,tEnt,tVal,handles); %Llama a la red  
-aPru=pruebas(w,b,P,vtf);
-%aPru=pruebas(w,b,mPru,vtf);
-graficar(P,T,aPru,Eit,Eval,handles,tipo_problema)
-%graficar(mPru,tPru,aPru,Eit,Eval,handles,tipo_problema)
+[Eit,Eval,w,b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,tEnt,tVal,handles); %Llama a la red
+aEntrenamiento=pruebas(w,b,P,vtf);
+aPruebas=pruebas(w,b,mPru,vtf);
+graficar(P,T,aEntrenamiento,aPruebas,tPru,Eit,Eval,handles,tipo_problema)
+
     
 
 % --- Executes during object creation, after setting all properties.
@@ -298,7 +298,7 @@ function get_dataset_Callback(hObject, eventdata, handles)
 
 global archivo_dataset
 
-[filename, pathname] = uigetfile('*.txt', 'archivo');
+[filename, pathname] = uigetfile('*.txt', 'Entradas');
 archivo_dataset = [pathname, filename];
 set(handles.dataset, 'String', archivo_dataset);
 
@@ -333,7 +333,7 @@ function get_targets_Callback(hObject, eventdata, handles)
 
 global archivo_targets
 
-[filename, pathname] = uigetfile('*.txt', 'archivo');
+[filename, pathname] = uigetfile('*.txt', 'Targets');
 archivo_targets = [pathname, filename];
 set(handles.targets, 'String', archivo_targets);
 
