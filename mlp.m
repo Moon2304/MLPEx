@@ -27,6 +27,8 @@ function [Eit,Eval,w,b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,m
 				[w,b]=backpropagation(a,w,b,vtf,e,alpha);
             end            
 			Eit(end)=Eit(end)/k;
+            %archivoswyb(w, b, vtf)
+            graficarwyb(w, b, vtf);
 		end
 	end
 end
