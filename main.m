@@ -270,10 +270,10 @@ global archivo_targets
 [P,T]=obtenerDataset(archivo_dataset, archivo_targets); %Dataset
 [w,b]=inicializardatos(vcn); %Inicialización de pesos y bias
 [mEnt,mVal,mPru,tEnt,tVal,tPru]=divDataset(P,T,dEnt); %División del dataset
-[Eit,Eval,w,b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,tEnt,tVal,handles); %Llama a la red
+[Eit,Eval,w,b,historico_w,historico_b] = mlp(vtf,alpha,maxepoch,minEtrain,valepoch,numval,w,b,mEnt,mVal,tEnt,tVal,handles); %Llama a la red
 aEntrenamiento=pruebas(w,b,P,vtf);
 aPruebas=pruebas(w,b,mPru,vtf);
-graficar(P,T,aEntrenamiento,aPruebas,tPru,Eit,Eval,handles,tipo_problema)
+graficar(P,T,mPru,tPru,aPruebas,aEntrenamiento,Eit,Eval,historico_w,historico_b,handles,tipo_problema)
 
     
 
