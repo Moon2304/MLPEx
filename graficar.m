@@ -17,10 +17,12 @@ function graficar(p,t,mPru,tPru,aPruebas,aEntrenamiento,Eit,Eval,historico_w,his
     plot(handles.actualizacion_pesos,1:length(historico_w{1}(:,1)),historico_w{1})
     
     for cont=1:length(historico_w)        
-        %plot(1:length(historico_w{1}(:,1)),historico_w{cont})
-        %title(['Actualización de pesos, capa: ' cont])
-        %plot(1:length(historico_b{1}(:,1)),historico_b{cont})
-        %title(['Actualización de bias, capa: ' cont])
+        figure('Name',['Actualización de pesos, capa: ' num2str(cont)]);
+        plot(1:length(historico_w{1}(:,1)),historico_w{cont})
+        %title(['Actualización de pesos, capa: ' num2str(cont)])
+        figure('Name',['Actualización de bias, capa: ' num2str(cont)]);
+        plot(1:length(historico_b{1}(:,1)),historico_b{cont})
+        %title(['Actualización de bias, capa: ' num2str(cont)])
     end
     
 end
